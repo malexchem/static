@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Management | Malex Chemical Supplies</title>
+
+    <!-- External libs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom assets -->
+    <link rel="stylesheet" href="css/salaries.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">Malex Chem Supplies</div>
+        <ul class="nav-menu">
+            <!--<li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-bar"></i> Dashboard</a></li>-->
+            <li class="nav-item"><a href="record.html" class="nav-link"><i class="fas fa-archive"></i> Records</a></li>
+            <!--<li class="nav-item"><a href="clients.html" class="nav-link"><i class="fas fa-school"></i> Clients / Schools</a></li>
+            <li class="nav-item"><a href="invoices.html" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Invoices & Payments</a></li>-->
+            <li class="nav-item"><a href="accounting.html" class="nav-link"><i class="fas fa-chart-line"></i> Accounting</a></li>
+            <li class="nav-item"><a href="salaries.html" class="nav-link active"><i class="fas fa-money-bill-wave"></i> Salary Management</a></li>
+            <li class="nav-item"><a href="users.html" class="nav-link"><i class="fas fa-users"></i> User Management</a></li>
+            <li class="nav-item"><a href="time-management.html" class="nav-link"><i class="fas fa-clock"></i> Time Management</a></li>
+
+            <li class="nav-item"><a href="login.html" class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!--<header class="header">
+            <h1 class="page-title">Salary Management</h1>
+            <div class="user-info">
+                <div class="user-avatar">JD</div>
+                <div>
+                    <div>John Doe</div>
+                    <small style="color: var(--gray-dark);">Finance Manager</small>
+                </div>
+            </div>
+        </header>-->
+
+        <!-- Action Buttons -->
+        <div class="page-actions">
+            <button class="btn btn-primary" id="addEmployeeBtn">
+                <i class="fas fa-user-plus"></i> Add Employee
+            </button>
+            <button class="btn btn-primary" id="startSalaryCycleBtn">
+                <i class="fas fa-play-circle"></i> Start Salary Cycle
+            </button>
+            <button class="btn btn-outline" id="importEmployeesBtn">
+                <i class="fas fa-file-import"></i> Import Employees
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-file-export"></i> Export Payroll
+            </button>
+        </div>
+
+        <!-- Salary Overview -->
+        <section class="financial-overview">
+            <div class="financial-card income">
+                <div class="financial-label">Total Monthly Salary</div>
+                <div class="financial-value">Ksh 0</div>
+            </div>
+            <div class="financial-card expense">
+                <div class="financial-label">Total Commissions</div>
+                <div class="financial-value">Ksh 0</div>
+            </div>
+            <div class="financial-card profit">
+                <div class="financial-label">Employees This Month</div>
+                <div class="financial-value">0</div>
+            </div>
+            <div class="financial-card balance">
+                <div class="financial-label">Avg. Salary</div>
+                <div class="financial-value">Ksh 0</div>
+            </div>
+        </section>
+
+        <!-- Charts -->
+        <section class="charts-container">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Salary Distribution</h3>
+                    <select id="salaryPeriod">
+                        <option>Last 3 Months</option>
+                        <option>Last 6 Months</option>
+                        <option selected>This Year</option>
+                    </select>
+                </div>
+                <canvas id="salaryDistributionChart" height="140"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Commission Breakdown</h3>
+                </div>
+                <canvas id="commissionChart" height="140"></canvas>
+            </div>
+        </section>
+
+        <!-- Current Salary Cycle -->
+        <section class="salary-cycle-section" id="currentCycleSection" style="display: none;">
+            <div class="section-header">
+                <h3 class="section-title">Current Salary Cycle</h3>
+                <div class="cycle-info">
+                    <span id="cycleMonth">June 2023</span>
+                    <button class="btn btn-primary" id="processPayrollBtn">
+                        <i class="fas fa-check-circle"></i> Process Payroll
+                    </button>
+                </div>
+            </div>
+
+            <div class="salary-cycle-actions">
+                <div class="search-box">
+                    <input type="text" id="employeeSearch" placeholder="Search employees...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <!--<div class="bulk-actions">
+                    <button class="btn btn-outline" id="selectAllBtn">Select All</button>
+                    <button class="btn btn-outline" id="deselectAllBtn">Deselect All</button>
+                </div>-->
+            </div>
+
+            <table class="salary-cycle-table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAllCheckbox"></th>
+                        <th>Employee</th>
+                        <th>Position</th>
+                        <th>Basic Salary</th>
+                        <th>Commission</th>
+                        <th>Allowances</th>
+                        <th>Deductions</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="salaryCycleTableBody">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Employees -->
+        <section class="employees-section">
+            <div class="section-header">
+                <h3 class="section-title">Employees</h3>
+                <!--<div class="filters">
+                    <select class="filter-select" id="positionFilter">
+                        <option value="all">All Positions</option>
+                        <option value="manager">Manager</option>
+                        <option value="sales">Sales</option>
+                        <option value="technician">Technician</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>-->
+            </div>
+
+            <table class="employees-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Basic Salary</th>
+                        <th>Commission Rate</th>
+                        <th>Payment Method</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeesTableBody">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <div class="pagination-info">Showing 1-10 of 25 employees</div>
+                <!--<div class="pagination-controls">
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">Next</button>
+                </div>-->
+            </div>
+        </section>
+
+        <!-- Salary History -->
+        <!--<section class="salary-history-section">
+            <div class="section-header">
+                <h3 class="section-title">Salary History</h3>
+                <div class="filters">
+                    <select class="filter-select" id="historyMonthFilter">
+                        <option value="all">All Months</option>
+                        <option value="january">January</option>
+                        <option value="february">February</option>
+                        <option value="march">March</option>
+                        <option value="april">April</option>
+                        <option value="may">May</option>
+                        <option value="june">June</option>
+                        <option value="january">July</option>
+                        <option value="february">August</option>
+                        <option value="march">September</option>
+                        <option value="april">October</option>
+                        <option value="may">November</option>
+                        <option value="june">December</option>
+                    </select>
+                    <select class="filter-select" id="historyYearFilter">
+                        <option value="2023">2025</option>
+                        <option value="2022">2026</option>
+                        <option value="2021">2021</option>
+                    </select>
+                </div>
+            </div>
+
+            <table class="salary-history-table">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Employee</th>
+                        <th>Basic Salary</th>
+                        <th>Commission</th>
+                        <th>Allowances</th>
+                        <th>Deductions</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="salaryHistoryTableBody">
+                     Will be populated by JavaScript 
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <div class="pagination-info">Showing 1-10 of 120 records</div>
+                <div class="pagination-controls">
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">Next</button>
+                </div>
+            </div>
+        </section>-->
+        <!-- Salary History -->
+<section class="salary-history-section">
+    <div class="section-header">
+        <h3 class="section-title">Salary History</h3>
+        <div class="filters">
+            <select class="filter-select" id="historyYearFilter">
+                <option value="2025" selected>2025</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="salaryHistoryContainer">
+        <!-- Monthly salary groups will be populated by JavaScript -->
+        <div class="no-history">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <h4>No Salary History Available</h4>
+            <p>Process payroll to see salary history</p>
+        </div>
+    </div>
+</section>
+    </main>
+
+    <!-- Add/Edit Employee Modal -->
+    <div class="modal" id="employeeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="employeeModalTitle">Add New Employee</h3>
+                <button class="modal-close" id="closeEmployeeModal">&times;</button>
+            </div>
+            <form id="employeeForm" class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="employeeFirstName" placeholder="Enter first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="employeeLastName" placeholder="Enter last name" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Position</label>
+                        <select class="form-control" id="employeePosition" required>
+                            <option value="">Select Position</option>
+                            <option value="manager">Manager</option>
+                            <option value="sales">Sales Executive</option>
+                            <option value="technician">Technician</option>
+                            <option value="admin">Administrator</option>
+                            <option value="driver">Driver</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Basic Salary (Ksh)</label>
+                        <input type="number" class="form-control" id="employeeSalary" placeholder="0.00" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Commission Rate (%)</label>
+                        <input type="number" class="form-control" id="employeeCommission" placeholder="0" step="0.1" min="0" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-control" id="employeePaymentMethod" required>
+                            <option value="">Select Method</option>
+                            <option value="bank">Bank Transfer</option>
+                            <option value="mpesa">M-Pesa</option>
+                            <option value="cash">Cash</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="employeeEmail" placeholder="Enter email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-control" id="employeePhone" placeholder="Enter phone number">
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelEmployee">Cancel</button>
+                <button class="btn btn-primary" id="saveEmployee">Save Employee</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Salary Details Modal -->
+    <div class="modal" id="salaryDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Salary Details</h3>
+                <button class="modal-close" id="closeSalaryModal">&times;</button>
+            </div>
+            <form id="salaryDetailsForm" class="modal-body">
+                <div class="salary-employee-info">
+                    <h4 id="salaryEmployeeName">John Doe</h4>
+                    <p id="salaryEmployeePosition">Sales Executive</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Basic Salary</label>
+                        <input type="number" class="form-control" id="editBasicSalary" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Commission (Ksh)</label>
+                        <input type="number" class="form-control" id="editCommission" placeholder="0.00" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Allowances (Ksh)</label>
+                        <input type="number" class="form-control" id="editAllowances" placeholder="0.00" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Deductions (Ksh)</label>
+                        <input type="number" class="form-control" id="editDeductions" placeholder="0.00" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Total Salary</label>
+                    <input type="number" class="form-control" id="editTotalSalary" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea class="form-control" id="salaryNotes" placeholder="Optional notes"></textarea>
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelSalaryDetails">Cancel</button>
+                <button class="btn btn-primary" id="saveSalaryDetails">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start Salary Cycle Modal -->
+    <div class="modal" id="startCycleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Start New Salary Cycle</h3>
+                <button class="modal-close" id="closeCycleModal">&times;</button>
+            </div>
+            <form id="startCycleForm" class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Salary Month</label>
+                    <select class="form-control" id="salaryMonth" required>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6" >June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11" selected>November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Salary Year</label>
+                    <select class="form-control" id="salaryYear" required>
+                        <option value="2025" selected>2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Payment Date</label>
+                    <input type="date" class="form-control" id="paymentDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="includeAllEmployees" checked>
+                        Include all active employees
+                    </label>
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelStartCycle">Cancel</button>
+                <button class="btn btn-primary" id="confirmStartCycle">Start Cycle</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/salaries.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        
+                // Check authentication on page load
+        if (!Auth.requireAuth()) {
+            // Redirect will happen automatically
+        }
+
+        // Update user info in header
+        function updateUserInfo() {
+            const user = Auth.getUser();
+            if (user) {
+                document.getElementById('userName').textContent = user.name || user.email;
+                document.getElementById('userRole').textContent = user.role || 'User';
+                document.getElementById('userAvatar').textContent = Auth.getUserInitials();
+            }
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        });
+
+        document.getElementById('logoutLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserInfo();
+        });
+    </script>
+</body>
+</html>

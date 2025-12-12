@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Records Management | Malex Chemical Supplies</title>
+
+    <!-- External libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">Malex Chem Supplies</div>
+        <ul class="nav-menu">
+            <!--<li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-bar"></i> Dashboard</a></li>-->
+            <li class="nav-item"><a href="record.html" class="nav-link active"><i class="fas fa-archive"></i> Records</a></li>
+            <!--<li class="nav-item"><a href="products.html" class="nav-link"><i class="fas fa-flask"></i> Products</a></li>
+            <li class="nav-item"><a href="inventory.html" class="nav-link"><i class="fas fa-boxes"></i> Inventory</a></li>
+            <li class="nav-item"><a href="suppliers.html" class="nav-link"><i class="fas fa-industry"></i> Suppliers</a></li>-->
+            <!--<li class="nav-item"><a href="clients.html" class="nav-link"><i class="fas fa-school"></i> Clients / Schools</a></li>
+           <li class="nav-item"><a href="orders.html" class="nav-link"><i class="fas fa-clipboard-list"></i> Orders</a></li>
+            <li class="nav-item"><a href="deliveries.html" class="nav-link"><i class="fas fa-truck"></i> Deliveries</a></li> 
+            <li class="nav-item"><a href="invoices.html" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Invoices & Payments</a></li>-->
+            <li class="nav-item"><a href="accounting.html" class="nav-link"><i class="fas fa-chart-line"></i> Accounting</a></li>
+            <!--<li class="nav-item"><a href="reports.html" class="nav-link"><i class="fas fa-chart-pie"></i> Reports</a></li>
+            <li class="nav-item"><a href="compliance.html" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Compliance & Safety</a></li>-->
+            <li class="nav-item"><a href="salaries.html" class="nav-link"><i class="fas fa-money-bill-wave"></i> Salary Management</a></li>
+            <li class="nav-item"><a href="users.html" class="nav-link"><i class="fas fa-users"></i> User Management</a></li> 
+            <li class="nav-item"><a href="time-management.html" class="nav-link"><i class="fas fa-clock"></i> Time Management</a></li>
+
+            <!--<li class="nav-item"><a href="notifications.html" class="nav-link"><i class="fas fa-bell"></i> Notifications</a></li>
+            <li class="nav-item"><a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a></li>
+            <li class="nav-item"><a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Profile</a></li>-->
+            <li class="nav-item"><a href="login.html" class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!--<header class="header">
+            <h1 class="page-title">Records Management</h1>
+            <div class="user-info">
+                <div class="user-avatar">JD</div>
+                <div>
+                    <div>John Doe</div>
+                    <small style="color: var(--gray-dark);">Sales Manager</small>
+                </div>
+            </div>
+        </header>-->
+
+        <!-- Action Buttons -->
+        <section class="page-actions">
+            <div class="filters">
+                <button class="btn btn-primary" id="addRecordBtn">
+                    <i class="fas fa-plus"></i> Add Record
+                </button>
+                <!--<button class="btn btn-outline">
+                    <i class="fas fa-file-export"></i> Export
+                </button>-->
+            </div>
+            <!--<div class="filters">
+                <select class="filter-select" id="typeFilter">
+                    <option value="all">All Types</option>
+                    <option value="invoice">Invoice</option>
+                    <option value="delivery">Delivery</option>
+                    <option value="quotation">Quotation</option>
+                </select>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search records...">
+            </div>-->
+        </section>
+
+        <!-- Insights Cards --
+        <section class="insights-cards">
+            <article class="insight-card invoice">
+                <div class="insight-label"><i class="fas fa-file-invoice-dollar"></i> Invoices</div>
+                <div class="insight-value">$84,250</div>
+                <div class="insight-change positive"><i class="fas fa-arrow-up"></i> 15.2% from last month</div>
+            </article>
+            <article class="insight-card delivery">
+                <div class="insight-label"><i class="fas fa-truck"></i> Deliveries</div>
+                <div class="insight-value">142</div>
+                <div class="insight-change positive"><i class="fas fa-arrow-up"></i> 8.7% from last month</div>
+            </article>
+            <article class="insight-card quotation">
+                <div class="insight-label"><i class="fas fa-file-contract"></i> Quotations</div>
+                <div class="insight-value">$126,800</div>
+                <div class="insight-change positive"><i class="fas fa-arrow-up"></i> 22.4% from last month</div>
+            </article>
+            <article class="insight-card total">
+                <div class="insight-label"><i class="fas fa-chart-line"></i> Total Value</div>
+                <div class="insight-value">$211,050</div>
+                <div class="insight-change positive"><i class="fas fa-arrow-up"></i> 18.5% from last month</div>
+            </article>
+        </section>-->
+
+        <!-- Records Section -->
+        <section class="records-section">
+            <div class="section-header">
+                <h3 class="section-title">All Records</h3>
+                <!--<div class="filters">
+                    <input type="date" class="filter-select" id="dateFilter">
+                    <select class="filter-select" id="customerFilter">
+                        <option value="all">All Customers</option>
+                        <option value="Greenwood High">Greenwood High</option>
+                        <option value="Central Academy">Central Academy</option>
+                        <option value="Northside Secondary">Northside Secondary</option>
+                        <option value="Westwood School">Westwood School</option>
+                    </select>
+                </div>-->
+            </div>
+
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+    
+                        <th>Customer</th>
+                        <th>Type</th>
+                        <th>Document No.</th>
+                        <th>Amount</th>
+                        <th>Facilitator</th>
+                        <th>Created By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="recordsTableBody"></tbody>
+            </table>
+
+            <div class="pagination">
+                <div class="pagination-info">Showing 1-10 of 142 records</div>
+                <div class="pagination-controls">
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">Next</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add / Edit Record Modal -->
+    <div class="modal" id="recordModal">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Record</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </header>
+            <form id="recordForm" class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Record Type</label>
+                        <select class="form-control" id="recordType" required>
+                            <option value="">Select Type</option>
+                            <option value="invoice">Invoice</option>
+                            <option value="cashSale">Delivery</option>
+                            <option value="quotation">Quotation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Document No.</label>
+                        <input type="text" class="form-control" id="documentNo" placeholder="e.g. 123456" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control" id="recordDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time</label>
+                        <input type="time" class="form-control" id="recordTime" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Customer</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="recordCustomer" 
+                        placeholder="Enter customer name"
+                        required
+                    >
+                </div>
+                <div class="form-row" id="amountField">
+                    <div class="form-group">
+                        <label class="form-label">Amount (Ksh)</label>
+                        <input type="number" class="form-control" id="recordAmount" placeholder="0.00" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Facilitator</label>
+                        <select class="form-control" id="recordFacilitator" required>
+                            <option value="">Select Facilitator</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Created By</label>
+                        <select class="form-control" id="recordCreatedBy" required>
+                            <option value="">Select Store Manager</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <footer class="modal-footer">
+                <button class="btn btn-outline" id="cancelRecord">Cancel</button>
+                <button class="btn btn-primary" id="saveRecord">Save Record</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Application logic -->
+    <script src="app.js"></script>
+    <script src="auth.js"></script>
+            <script>
+
+    // Check authentication on page load
+        if (!Auth.requireAuth()) {
+            // Redirect will happen automatically
+        }
+
+        // Update user info in header
+        function updateUserInfo() {
+            const user = Auth.getUser();
+            if (user) {
+                document.getElementById('userName').textContent = user.name || user.email;
+                document.getElementById('userRole').textContent = user.role || 'User';
+                document.getElementById('userAvatar').textContent = Auth.getUserInitials();
+            }
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        });
+
+        document.getElementById('logoutLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserInfo();
+        });
+
+
+
+const API_URL = "https://malexoffice-bkdt.onrender.com/api/users";
+
+async function loadUsers() {
+    try {
+        const res = await fetch(API_URL);
+        const users = await res.json(); // users array directly
+
+        // Filter facilitators
+        const facilitators = users.filter(u => u.role === "facilitator");
+
+        // Filter store managers
+        const storeManagers = users.filter(u => u.role === "storeManager");
+
+        // DOM elements
+        const facilitatorSelect = document.getElementById("recordFacilitator");
+        const createdBySelect = document.getElementById("recordCreatedBy");
+
+        facilitatorSelect.innerHTML = `<option value="">Select Facilitator</option>`;
+        createdBySelect.innerHTML = `<option value="">Select Creator</option>`;
+
+        facilitators.forEach(user => {
+            const option = document.createElement("option");
+            option.value = user.name;
+            option.textContent = user.name;
+            facilitatorSelect.appendChild(option);
+        });
+
+        storeManagers.forEach(user => {
+            const option = document.createElement("option");
+            option.value = user.name;
+            option.textContent = user.name;
+            createdBySelect.appendChild(option);
+        });
+
+        console.log("Users loaded:", users);
+
+    } catch (err) {
+        console.error("Error loading users:", err);
+    }
+}
+
+
+// Load users when page loads
+document.addEventListener("DOMContentLoaded", loadUsers);
+</script>
+</body>
+</html>

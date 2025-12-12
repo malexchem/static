@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounting | Malex Chemical Supplies</title>
+
+    <!-- External libs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom assets -->
+    <link rel="stylesheet" href="css/accounting.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">Malex Chem Supplies</div>
+        <ul class="nav-menu">
+            <!--<li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-bar"></i> Dashboard</a></li>-->
+            <li class="nav-item"><a href="record.html" class="nav-link"><i class="fas fa-archive"></i> Records</a></li>
+             <!--<li class="nav-item"><a href="clients.html" class="nav-link"><i class="fas fa-school"></i> Clients / Schools</a></li>
+            <li class="nav-item"><a href="invoices.html" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> Invoices & Payments</a></li>-->
+            <li class="nav-item"><a href="accounting.html" class="nav-link active"><i class="fas fa-chart-line"></i> Accounting</a></li>
+            <li class="nav-item"><a href="salaries.html" class="nav-link"><i class="fas fa-money-bill-wave"></i> Salary Management</a></li>
+
+            <li class="nav-item"><a href="users.html" class="nav-link"><i class="fas fa-users"></i> User Management</a></li>
+            <li class="nav-item"><a href="time-management.html" class="nav-link"><i class="fas fa-clock"></i> Time Management</a></li>
+            <li class="nav-item"><a href="login.html" class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!--<header class="header">
+            <h1 class="page-title">Accounting</h1>
+            <div class="user-info">
+                <div class="user-avatar">JD</div>
+                <div>
+                    <div>John Doe</div>
+                    <small style="color: var(--gray-dark);">Finance Manager</small>
+                </div>
+            </div>
+        </header>-->
+
+        <!-- Action Buttons -->
+        <div class="page-actions">
+            <button class="btn btn-primary" id="addTransactionBtn">
+                <i class="fas fa-plus"></i> Add Transaction
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-file-export"></i> Export Report
+            </button>
+            <button class="btn btn-outline">
+                <i class="fas fa-print"></i> Print
+            </button>
+        </div>
+
+        <!-- Financial Overview -->
+        <section class="financial-overview">
+            <div class="financial-card income">
+                <div class="financial-label">Total Income</div>
+                <div class="financial-value">Ksh0</div>
+                <!--<div class="financial-change positive">
+                    <i class="fas fa-arrow-up"></i> 12.5% from last month
+                </div>-->
+            </div>
+            <div class="financial-card expense">
+                <div class="financial-label">Total Expenses</div>
+                <div class="financial-value">Ksh 0</div>
+                <!--<div class="financial-change negative">
+                    <i class="fas fa-arrow-up"></i> 8.2% from last month
+                </div>-->
+            </div>
+            <div class="financial-card profit">
+                <div class="financial-label">Account Balance</div>
+                <div class="financial-value">Ksh 0</div>
+                <!--<div class="financial-change positive">
+                    <i class="fas fa-arrow-up"></i> 24.3% from last month
+                </div>-->
+            </div>
+            <!--<div class="financial-card balance">
+                <div class="financial-label">Account Balance</div>
+                <div class="financial-value">$52,750</div>
+                <div class="financial-change positive">
+                    <i class="fas fa-arrow-up"></i> 5.7% from last month
+                </div>
+            </div>-->
+        </section>
+
+        <!-- Charts -->
+        <section class="charts-container">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Income vs Expenses</h3>
+                    <select id="chartPeriod">
+                        <option>Last 30 Days</option>
+                        <option>Last 3 Months</option>
+                        <option>Last 6 Months</option>
+                        <option selected>This Year</option>
+                    </select>
+                </div>
+                <canvas id="incomeExpenseChart" height="140"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Expense Breakdown</h3>
+                </div>
+                <canvas id="expenseChart" height="100"></canvas>
+            </div>
+        </section>
+
+        <!-- Transactions -->
+        <section class="transactions-section">
+            <div class="section-header">
+                <h3 class="section-title">Recent Transactions</h3>
+                <div class="filters">
+                    <select class="filter-select" id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="all">All Categories</option>
+                        <option value="sales">Sales</option>
+                        <option value="supplies">Supplies</option>
+                        <option value="salaries">Salaries</option>
+                        <option value="utilities">Utilities</option>
+                    </select>
+                    <input type="date" class="filter-select" id="dateFilter">
+                </div>
+            </div>
+
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Payment Method</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsTableBody"></tbody>
+            </table>
+
+            <div class="pagination">
+                <div class="pagination-info">Showing 1-10 of 247 transactions</div>
+                <div class="pagination-controls">
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">Next</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add/Edit Transaction Modal -->
+    <div class="modal" id="transactionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Transaction</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <form id="transactionForm" class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select class="form-control" id="transactionType" required>
+                            <option value="">Select Type</option>
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control" id="transactionDate" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <input type="text" class="form-control" id="transactionDescription" placeholder="Enter description" required>
+                </div>
+
+                <div class="form-row">
+                    <!--<div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-control" id="transactionCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="sales">Sales</option>
+                            <option value="supplies">Supplies</option>
+                            <option value="salaries">Salaries</option>
+                            <option value="utilities">Utilities</option>
+                            <option value="maintenance">Maintenance</option>
+                            <option value="transport">Transport</option>
+                        </select>
+                    </div>-->
+                    <div class="form-group">
+                        <label class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="transactionAmount" placeholder="0.00" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-control" id="transactionMethod" required>
+                            <option value="">Select Method</option>
+                            <option value="cash">Cash</option>
+                            <option value="bank">Bank Transfer</option>
+                            <option value="mpesa">M-Pesa</option>
+                            <!--<option value="card">Credit Card</option>-->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Reference</label>
+                        <input type="text" class="form-control" id="transactionReference" placeholder="Optional reference">
+                    </div>
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelTransaction">Cancel</button>
+                <button class="btn btn-primary" id="saveTransaction">Save Transaction</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/accounting.js"></script>
+
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+    const dateInput = document.getElementById("transactionDate");
+    if (!dateInput) {
+        console.error("transactionDate element not found!");
+        return;
+    }
+
+    const today = new Date().toISOString().split("T")[0];
+    dateInput.value = today;
+    dateInput.readOnly = true;
+
+    dateInput.addEventListener("click", (e) => e.preventDefault());
+    dateInput.addEventListener("keydown", (e) => e.preventDefault());
+});
+
+       
+       // Check authentication on page load
+        if (!Auth.requireAuth()) {
+            // Redirect will happen automatically
+        }
+
+        // Update user info in header
+        function updateUserInfo() {
+            const user = Auth.getUser();
+            if (user) {
+                document.getElementById('userName').textContent = user.name || user.email;
+                document.getElementById('userRole').textContent = user.role || 'User';
+                document.getElementById('userAvatar').textContent = Auth.getUserInitials();
+            }
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        });
+
+        document.getElementById('logoutLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserInfo();
+        });    
+    // Define categories for each type
+    const incomeCategories = [
+        "Director Funding",
+        "Loan Repayment",
+        "Grants",
+        "Other Income"
+    ];
+
+    const expenseCategories = [
+        "Supplies",
+        "Salaries",
+        "Utilities",
+        "Maintenance",
+        "Transport",
+        "Rent",
+        "Other Expense"
+    ];
+
+    // Select elements
+    const typeSelect = document.getElementById("transactionType");
+    const categorySelect = document.getElementById("transactionCategory");
+
+    // Function to load categories dynamically
+    function loadCategories(type) {
+        categorySelect.innerHTML = `<option value="">Select Category</option>`; // Clear old categories
+
+        let list = [];
+
+        if (type === "income") list = incomeCategories;
+        if (type === "expense") list = expenseCategories;
+
+        list.forEach(cat => {
+            const option = document.createElement("option");
+            option.value = cat.toLowerCase().replace(/\s+/g, "-");
+            option.textContent = cat;
+            categorySelect.appendChild(option);
+        });
+    }
+
+    // Trigger category loading when type changes
+    typeSelect.addEventListener("change", function () {
+        if (this.value) loadCategories(this.value);
+    });
+
+
+</script>
+
+</body>
+</html>

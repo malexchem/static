@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | Malex Chemical Supplies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1e88e5;
+            --dark-blue: #1565c0;
+            --light-blue: #e3f2fd;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --gray-medium: #e0e0e0;
+            --gray-dark: #424242;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --admin: #f44336;
+            --storeManager: #2196f3;
+            --facilitator: #4caf50;
+            --purple: #9c27b0;
+            --orange: #ff9800;
+            --teal: #009688;
+            --indigo: #3f51b5;
+            --deep-purple: #673ab7;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e3f2fd 0%, #e3f2fd 100%);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            height: 100vh;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: fixed;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .logo {
+            text-align: center;
+            padding: 25px 20px;
+            color: var(--primary-blue);
+            font-weight: bold;
+            font-size: 26px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-menu {
+            list-style: none;
+            padding: 0 15px;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--gray-dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+        
+        .nav-link:hover {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(30, 136, 229, 0.3);
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            box-shadow: 0 5px 15px rgba(30, 136, 229, 0.3);
+        }
+        
+        .nav-link i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            padding: 25px 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .page-title {
+            color: var(--dark-blue);
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--light-blue), #bbdefb);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+        }
+        
+        .page-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 25px 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 136, 229, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #43a047);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #f57c00);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--error), #d32f2f);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-card.admin::before { background: linear-gradient(135deg, var(--admin), #d32f2f); }
+        .stat-card.storeManager::before { background: linear-gradient(135deg, var(--storeManager), #1976d2); }
+        .stat-card.facilitator::before { background: linear-gradient(135deg, var(--facilitator), #388e3c); }
+        
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card.admin .stat-icon {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(244, 67, 54, 0.05));
+            color: var(--admin);
+        }
+        
+        .stat-card.storeManager .stat-icon {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(33, 150, 243, 0.05));
+            color: var(--storeManager);
+        }
+        
+        .stat-card.facilitator .stat-icon {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.05));
+            color: var(--facilitator);
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-card.admin .stat-value { background: linear-gradient(135deg, var(--admin), #d32f2f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-card.storeManager .stat-value { background: linear-gradient(135deg, var(--storeManager), #1976d2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-card.facilitator .stat-value { background: linear-gradient(135deg, var(--facilitator), #388e3c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .stat-label {
+            color: var(--gray-dark);
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .users-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: var(--dark-blue);
+            font-weight: 700;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .filter-select, .search-input {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            background: var(--white);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-select:focus, .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        }
+        
+        .search-input {
+            width: 280px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 15px center;
+            background-size: 18px;
+            padding-left: 45px;
+        }
+        
+        .users-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .users-table th {
+            text-align: left;
+            padding: 18px 20px;
+            background: linear-gradient(135deg, var(--light-blue), #e1f5fe);
+            color: var(--dark-blue);
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .users-table th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+        
+        .users-table th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+        
+        .users-table td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .users-table tr:hover td {
+            background: rgba(30, 136, 229, 0.05);
+            transform: scale(1.01);
+        }
+        
+        .user-avatar-small {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
+        }
+        
+        .user-info-cell {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: var(--dark-blue);
+            font-size: 16px;
+        }
+        
+        .user-email {
+            font-size: 13px;
+            color: var(--gray-dark);
+        }
+        
+        .role-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .role-admin {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(244, 67, 54, 0.05));
+            color: var(--admin);
+            border: 1px solid rgba(244, 67, 54, 0.2);
+        }
+        
+        .role-storeManager {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(33, 150, 243, 0.05));
+            color: var(--storeManager);
+            border: 1px solid rgba(33, 150, 243, 0.2);
+        }
+        
+        .role-facilitator {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.05));
+            color: var(--facilitator);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+        
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-active {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.05));
+            color: var(--success);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+        
+        .status-inactive {
+            background: linear-gradient(135deg, rgba(158, 158, 158, 0.15), rgba(158, 158, 158, 0.05));
+            color: var(--gray-dark);
+            border: 1px solid rgba(158, 158, 158, 0.2);
+        }
+        
+        .status-pending {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.15), rgba(255, 152, 0, 0.05));
+            color: var(--warning);
+            border: 1px solid rgba(255, 152, 0, 0.2);
+        }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            padding: 10px 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-edit {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.15), rgba(33, 150, 243, 0.05));
+            color: var(--storeManager);
+            border: 1px solid rgba(33, 150, 243, 0.2);
+        }
+        
+        .action-edit:hover {
+            background: var(--storeManager);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+        
+        .action-delete {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(244, 67, 54, 0.05));
+            color: var(--admin);
+            border: 1px solid rgba(244, 67, 54, 0.2);
+        }
+        
+        .action-delete:hover {
+            background: var(--admin);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+        
+        .action-permissions {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.15), rgba(156, 39, 176, 0.05));
+            color: var(--purple);
+            border: 1px solid rgba(156, 39, 176, 0.2);
+        }
+        
+        .action-permissions:hover {
+            background: var(--purple);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .pagination-info {
+            color: var(--gray-dark);
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .pagination-btn {
+            padding: 10px 16px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            background: var(--white);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        
+        .pagination-btn.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            width: 600px;
+            max-width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, var(--light-blue), #e1f5fe);
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            color: var(--dark-blue);
+            font-weight: 700;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray-dark);
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--error);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .modal-footer {
+            padding: 25px 30px;
+            border-top: 2px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray-dark);
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: var(--gray-medium);
+            opacity: 0.5;
+        }
+        
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--gray-dark);
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            color: var(--gray-medium);
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 12px;
+            color: var(--white);
+            font-weight: 600;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background: linear-gradient(135deg, var(--success), #43a047);
+        }
+        
+        .toast.error {
+            background: linear-gradient(135deg, var(--error), #d32f2f);
+        }
+        
+        .toast.warning {
+            background: linear-gradient(135deg, var(--warning), #f57c00);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="logo">Malex Chem Supplies</div>
+        <ul class="nav-menu">
+            <!--<li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-bar"></i> Dashboard</a></li>-->
+            <li class="nav-item"><a href="record.html" class="nav-link"><i class="fas fa-archive"></i> Records</a></li>
+            <li class="nav-item"><a href="accounting.html" class="nav-link"><i class="fas fa-chart-line"></i> Accounting</a></li>
+            <li class="nav-item"><a href="salaries.html" class="nav-link"><i class="fas fa-money-bill-wave"></i> Salary Management</a></li>
+            <li class="nav-item"><a href="users.html" class="nav-link active"><i class="fas fa-users"></i> User Management</a></li>
+            <li class="nav-item"><a href="time-management.html" class="nav-link"><i class="fas fa-clock"></i> Time Management</a></li>
+            <li class="nav-item"><a href="login.html" class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>    
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">User Management</h1>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">AD</div>
+                <div>
+                    <div class="user-name" id="userName">Admin User</div>
+                    <div class="user-role" id="userRole" style="font-size: 12px; color: var(--gray-dark);">System Administrator</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="page-actions">
+            <div class="filters">
+                <button class="btn btn-primary" id="addUserBtn">
+                    <i class="fas fa-user-plus"></i> Add New User
+                </button>
+                <button class="btn btn-outline" id="refreshUsersBtn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+            <div class="filters">
+                <select class="filter-select" id="roleFilter">
+                    <option value="all">All Roles</option>
+                    <option value="admin">Administrator</option>
+                    <option value="storeManager">Store Manager</option>
+                    <option value="facilitator">Facilitator</option>
+                </select>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search users by name or email...">
+            </div>
+        </div>
+        
+        <!-- User Stats Cards -->
+        <div class="stats-cards">
+            <div class="stat-card admin">
+                <div class="stat-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="stat-value" id="adminCount">0</div>
+                <div class="stat-label">Administrators</div>
+            </div>
+            <div class="stat-card storeManager">
+                <div class="stat-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="stat-value" id="storeManagerCount">0</div>
+                <div class="stat-label">Store Managers</div>
+            </div>
+            <div class="stat-card facilitator">
+                <div class="stat-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-value" id="facilitatorCount">0</div>
+                <div class="stat-label">Facilitators</div>
+            </div>
+        </div>
+        
+        <!-- Users Section -->
+        <div class="users-section">
+            <div class="section-header">
+                <h3 class="section-title">All Users</h3>
+                <div class="filters">
+                    <div class="pagination-info" id="paginationInfo">Loading users...</div>
+                </div>
+            </div>
+            
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Email</th>
+                        <th>Created</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <i class="fas fa-users"></i>
+                                <h3>Loading Users...</h3>
+                                <p>Please wait while we fetch user data</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="pagination">
+                <div class="pagination-info" id="tableInfo">Loading...</div>
+                <div class="pagination-controls">
+                    <button class="pagination-btn" id="prevPage">Previous</button>
+                    <span style="padding: 10px 16px; font-weight: 600;">Page <span id="currentPage">1</span></span>
+                    <button class="pagination-btn" id="nextPage">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add User Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="userModalTitle">Add New User</h3>
+                <button class="modal-close" id="closeUserModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="userNameInput" placeholder="Enter full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="userEmail" placeholder="Enter email address" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="userPassword" placeholder="Enter password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="userConfirmPassword" placeholder="Confirm password" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Role</label>
+                        <select class="form-control" id="userRoleSelect" required>
+                            <option value="">Select Role</option>
+                            <option value="admin">Administrator</option>
+                            <option value="storeManager">Store Manager</option>
+                            <option value="facilitator">Facilitator</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelUser">Cancel</button>
+                <button class="btn btn-primary" id="saveUser">
+                    <span id="saveUserText">Save User</span>
+                    <div class="loading-spinner" id="saveUserSpinner"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast" id="toast"></div>
+
+    <script src="auth.js"></script>
+    <script>
+        // API Configuration
+        //const API_BASE_URL = 'https://malexoffice-bkdt.onrender.com/api';
+
+        // Global variables
+        let users = [];
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let currentEditingUserId = null;
+
+        // DOM Elements
+        const usersTableBody = document.getElementById('usersTableBody');
+        const userModal = document.getElementById('userModal');
+        const addUserBtn = document.getElementById('addUserBtn');
+        const refreshUsersBtn = document.getElementById('refreshUsersBtn');
+        const closeUserModal = document.getElementById('closeUserModal');
+        const cancelUser = document.getElementById('cancelUser');
+        const saveUser = document.getElementById('saveUser');
+        const roleFilter = document.getElementById('roleFilter');
+        const searchInput = document.getElementById('searchInput');
+        const prevPage = document.getElementById('prevPage');
+        const nextPage = document.getElementById('nextPage');
+        const currentPageSpan = document.getElementById('currentPage');
+        const tableInfo = document.getElementById('tableInfo');
+        const paginationInfo = document.getElementById('paginationInfo');
+        const toast = document.getElementById('toast');
+
+        // Stats elements
+        const adminCount = document.getElementById('adminCount');
+        const storeManagerCount = document.getElementById('storeManagerCount');
+        const facilitatorCount = document.getElementById('facilitatorCount');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            Auth.init();
+            loadUsers();
+            setupEventListeners();
+        });
+
+        // API Functions
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const token = Auth.getToken();
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                        ...options.headers
+                    },
+                    ...options
+                });
+
+                if (response.status === 401) {
+                    Auth.logout();
+                    throw new Error('Authentication failed');
+                }
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            }
+        }
+
+        // Load users from backend
+        async function loadUsers() {
+            try {
+                showLoadingState();
+                const data = await apiCall('/users');
+                users = data;
+                updateStats();
+                renderUsers();
+            } catch (error) {
+                console.error('Failed to load users:', error);
+                showError('Failed to load users. Please try again.');
+                renderEmptyState('Failed to load users. Please try again.');
+            }
+        }
+
+        // Create user
+        async function createUser(userData) {
+            try {
+                const response = await apiCall('/users/createByAdmin', {
+                    method: 'POST',
+                    body: JSON.stringify(userData)
+                });
+                return response.user;
+            } catch (error) {
+                console.error('Failed to create user:', error);
+                throw error;
+            }
+        }
+
+        // Update user
+        async function updateUser(userId, userData) {
+            try {
+                // Note: Your API uses name-based update, so we need to adjust
+                const response = await apiCall(`/users/${userData.name}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(userData)
+                });
+                return response;
+            } catch (error) {
+                console.error('Failed to update user:', error);
+                throw error;
+            }
+        }
+
+        // Delete user
+        async function deleteUser(userId) {
+            try {
+                await apiCall(`/users/${userId}`, {
+                    method: 'DELETE'
+                });
+                return true;
+            } catch (error) {
+                console.error('Failed to delete user:', error);
+                throw error;
+            }
+        }
+
+        // Update stats cards
+        function updateStats() {
+            const adminUsers = users.filter(user => user.role === 'admin');
+            const storeManagerUsers = users.filter(user => user.role === 'storeManager');
+            const facilitatorUsers = users.filter(user => user.role === 'facilitator');
+
+            adminCount.textContent = adminUsers.length;
+            storeManagerCount.textContent = storeManagerUsers.length;
+            facilitatorCount.textContent = facilitatorUsers.length;
+        }
+
+        // Render users table
+        function renderUsers() {
+            const filteredUsers = filterUsers();
+            const paginatedUsers = paginateUsers(filteredUsers);
+            
+            usersTableBody.innerHTML = '';
+
+            if (paginatedUsers.length === 0) {
+                renderEmptyState('No users found matching your criteria');
+                return;
+            }
+
+            paginatedUsers.forEach(user => {
+                const row = document.createElement('tr');
+                
+                // Get initials for avatar
+                const initials = user.name
+                    .split(' ')
+                    .map(n => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2);
+
+                // Format created date
+                const createdDate = new Date(user.createdAt);
+                const formattedDate = createdDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric'
+                });
+
+                // Determine status based on last activity or other criteria
+                const status = 'active'; // You can implement more sophisticated status logic
+
+                row.innerHTML = `
+                    <td>
+                        <div class="user-info-cell">
+                            <div class="user-avatar-small">${initials}</div>
+                            <div class="user-details">
+                                <div class="user-name">${user.name}</div>
+                                <div class="user-email">${user.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-${user.role}">${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span></td>
+                    <td>${user.email}</td>
+                    <td>${formattedDate}</td>
+                    <td><span class="status-badge status-${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                    <td class="actions">
+                        <button class="action-btn action-edit" data-id="${user._id}" title="Edit User">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn action-delete" data-id="${user._id}" title="Delete User">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                usersTableBody.appendChild(row);
+            });
+
+            // Update table info
+            const startIndex = (currentPage - 1) * itemsPerPage + 1;
+            const endIndex = Math.min(startIndex + itemsPerPage - 1, filteredUsers.length);
+            tableInfo.textContent = `Showing ${startIndex}-${endIndex} of ${filteredUsers.length} users`;
+            paginationInfo.textContent = `${filteredUsers.length} users total`;
+
+            // Add event listeners to action buttons
+            document.querySelectorAll('.action-edit').forEach(button => {
+                button.addEventListener('click', function() {
+                    const userId = this.getAttribute('data-id');
+                    editUser(userId);
+                });
+            });
+            
+            document.querySelectorAll('.action-delete').forEach(button => {
+                button.addEventListener('click', function() {
+                    const userId = this.getAttribute('data-id');
+                    deleteUserHandler(userId);
+                });
+            });
+
+            // Update pagination controls
+            updatePaginationControls(filteredUsers.length);
+        }
+
+        // Render empty state
+        function renderEmptyState(message) {
+            usersTableBody.innerHTML = `
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <h3>${message}</h3>
+                            <p>Try adjusting your filters or add a new user</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            tableInfo.textContent = 'No users to display';
+        }
+
+        // Show loading state
+        function showLoadingState() {
+            usersTableBody.innerHTML = `
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <h3>Loading Users...</h3>
+                            <p>Please wait while we fetch user data</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Filter users based on selected criteria
+        function filterUsers() {
+            const roleValue = roleFilter.value;
+            const searchValue = searchInput.value.toLowerCase();
+
+            let filteredUsers = users;
+
+            if (roleValue !== 'all') {
+                filteredUsers = filteredUsers.filter(user => user.role === roleValue);
+            }
+
+            if (searchValue) {
+                filteredUsers = filteredUsers.filter(user => 
+                    user.name.toLowerCase().includes(searchValue) ||
+                    user.email.toLowerCase().includes(searchValue)
+                );
+            }
+
+            return filteredUsers;
+        }
+
+        // Paginate users
+        function paginateUsers(usersList) {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            return usersList.slice(startIndex, endIndex);
+        }
+
+        // Update pagination controls
+        function updatePaginationControls(totalUsers) {
+            const totalPages = Math.ceil(totalUsers / itemsPerPage);
+            
+            currentPageSpan.textContent = currentPage;
+            
+            prevPage.disabled = currentPage === 1;
+            nextPage.disabled = currentPage === totalPages || totalPages === 0;
+            
+            prevPage.style.opacity = prevPage.disabled ? '0.5' : '1';
+            nextPage.style.opacity = nextPage.disabled ? '0.5' : '1';
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Modal controls
+            addUserBtn.addEventListener('click', () => {
+                openAddUserModal();
+            });
+            
+            refreshUsersBtn.addEventListener('click', () => {
+                loadUsers();
+                showToast('Users refreshed successfully', 'success');
+            });
+            
+            closeUserModal.addEventListener('click', closeUserModalHandler);
+            cancelUser.addEventListener('click', closeUserModalHandler);
+            
+            // Save user
+            saveUser.addEventListener('click', saveUserHandler);
+            
+            // Filters
+            roleFilter.addEventListener('change', () => {
+                currentPage = 1;
+                renderUsers();
+            });
+            
+            searchInput.addEventListener('input', () => {
+                currentPage = 1;
+                renderUsers();
+            });
+            
+            // Pagination
+            prevPage.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderUsers();
+                }
+            });
+            
+            nextPage.addEventListener('click', () => {
+                const filteredUsers = filterUsers();
+                const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderUsers();
+                }
+            });
+        }
+
+        // Open add user modal
+        function openAddUserModal(user = null) {
+            document.getElementById('userModalTitle').textContent = user ? 'Edit User' : 'Add New User';
+            document.getElementById('userForm').reset();
+            
+            if (user) {
+                document.getElementById('userNameInput').value = user.name;
+                document.getElementById('userEmail').value = user.email;
+                document.getElementById('userRoleSelect').value = user.role;
+                currentEditingUserId = user._id;
+                
+                // Hide password fields for editing
+                document.getElementById('userPassword').closest('.form-group').style.display = 'none';
+                document.getElementById('userConfirmPassword').closest('.form-group').style.display = 'none';
+            } else {
+                document.getElementById('userPassword').closest('.form-group').style.display = 'block';
+                document.getElementById('userConfirmPassword').closest('.form-group').style.display = 'block';
+                currentEditingUserId = null;
+            }
+            
+            userModal.style.display = 'flex';
+        }
+
+        // Close user modal
+        function closeUserModalHandler() {
+            userModal.style.display = 'none';
+            currentEditingUserId = null;
+        }
+
+        // Save user handler
+        async function saveUserHandler() {
+            const form = document.getElementById('userForm');
+            const saveUserText = document.getElementById('saveUserText');
+            const saveUserSpinner = document.getElementById('saveUserSpinner');
+            
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const userData = {
+                name: document.getElementById('userNameInput').value,
+                email: document.getElementById('userEmail').value,
+                role: document.getElementById('userRoleSelect').value
+            };
+
+            // Add password only for new users
+            if (!currentEditingUserId) {
+                const password = document.getElementById('userPassword').value;
+                const confirmPassword = document.getElementById('userConfirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    showError('Passwords do not match');
+                    return;
+                }
+                
+                if (password.length < 7) {
+                    showError('Password must be at least 7 characters long');
+                    return;
+                }
+                
+                userData.password = password;
+            }
+
+            // Show loading state
+            saveUser.disabled = true;
+            saveUserText.textContent = 'Saving...';
+            saveUserSpinner.style.display = 'block';
+
+            try {
+                if (currentEditingUserId) {
+                    // Update existing user
+                    await updateUser(currentEditingUserId, userData);
+                    showToast('User updated successfully', 'success');
+                } else {
+                    // Create new user
+                    await createUser(userData);
+                    showToast('User created successfully', 'success');
+                }
+                
+                closeUserModalHandler();
+                loadUsers();
+                
+            } catch (error) {
+                console.error('Failed to save user:', error);
+                const errorMessage = error.message.includes('Email already in use') 
+                    ? 'Email address is already in use' 
+                    : 'Failed to save user. Please try again.';
+                showError(errorMessage);
+            } finally {
+                // Reset button state
+                saveUser.disabled = false;
+                saveUserText.textContent = currentEditingUserId ? 'Update User' : 'Save User';
+                saveUserSpinner.style.display = 'none';
+            }
+        }
+
+        // Edit user
+        function editUser(userId) {
+            const user = users.find(u => u._id === userId);
+            if (user) {
+                openAddUserModal(user);
+            }
+        }
+
+        // Delete user handler
+        async function deleteUserHandler(userId) {
+            const user = users.find(u => u._id === userId);
+            if (!user) return;
+
+            if (confirm(`Are you sure you want to delete user "${user.name}"? This action cannot be undone.`)) {
+                try {
+                    await deleteUser(userId);
+                    showToast('User deleted successfully', 'success');
+                    loadUsers();
+                } catch (error) {
+                    console.error('Failed to delete user:', error);
+                    showError('Failed to delete user. Please try again.');
+                }
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show error message
+        function showError(message) {
+            showToast(message, 'error');
+        }
+    </script>
+</body>
+</html>
